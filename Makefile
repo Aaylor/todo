@@ -2,14 +2,6 @@ OCAMLOPT  = ocamlopt
 OCAMLDEP  = ocamldep
 OCAMLFIND = ocamlfind
 
-## FUNCTIONS
-
-ext_ocamldep = $(shell $(OCAMLDEP) -native -sort $(FOLDERS_FLAG)) \
-	$(shell find $(ROOT) -name $(1))
-
-## END FUNCTIONS
-
-
 # FILES
 ROOT        = src
 SOURCES     = $(shell $(OCAMLDEP) -native -sort $(FOLDERS_FLAG) \
@@ -24,7 +16,9 @@ FOLDERS         = $(shell find $(ROOT) -type d)
 FOLDERS_FLAG    = $(foreach folder,$(FOLDERS),-I $(folder))
 WARNING_FLAGS   = -w @1..3@5..8@10..26@28..31+32..38@39..43@46..49+50
 OCAMLC_FLAGS    = $(FOLDERS_FLAG) $(WARNING_FLAGS) -annot
-OCAMLFIND_FLAGS = -package unix -linkpkg
+PACKAGES        = cmdliner unix
+PACKAGES_FLAGS  = $(foreach pkg,$(PACKAGES),-package $(pkg))
+OCAMLFIND_FLAGS = $(PACKAGES_FLAGS) -linkpkg
 
 BINARY = todo
 
