@@ -17,7 +17,7 @@ let add msg =
   let id = fresh_identifier () in
   let filename = Filename.concat todo_folder (sprintf "%05d.todo" id) in
   with_output filename >>+ fun c -> output_string c msg;
-  with_output identifier_file  >>+ fun c -> output_string c (sprintf "%d" id)
+  with_output identifier_file >>+ fun c -> output_string c (sprintf "%d" id)
 
 let move_done_file id =
   let filename = sprintf "%05d.todo" id in
