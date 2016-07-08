@@ -2,14 +2,6 @@
 open Cmdliner
 open TodoConf
 
-
-let () =
-  let folders = [base_folder; todo_folder; done_folder] in
-  List.iter TodoIO.mkdir folders
-
-
-(* Add command *)
-
 let add =
   let doc = "TODO" in
   let description =
@@ -61,6 +53,10 @@ let default =
 let commands = [
   add; done_; list
 ]
+
+let () =
+  let folders = [base_folder; todo_folder; done_folder] in
+  List.iter TodoIO.mkdir folders
 
 let () =
   match Term.eval_choice ~catch:false default commands with
