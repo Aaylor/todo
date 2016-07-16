@@ -12,7 +12,3 @@ let with_resource (o, c) f =
   with exn ->
     c resource;
     raise exn
-
-module Infix = struct
-  let ( >>+ ) = with_resource
-end

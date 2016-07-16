@@ -6,5 +6,11 @@ let mkdir path =
   else if not exists then
     Unix.mkdir path 0o740
 
-let with_input path = (fun () -> open_in path), close_in
-let with_output path = (fun () -> open_out path), close_out
+let with_input path =
+  Resource.with_resource ((fun () -> open_in path), close_in)
+
+let with_output path =
+  Resource.with_resource (
+    (fun () -> open_out path),
+    (fun c -> flush c; close_out c)
+  )

@@ -1,23 +1,37 @@
 
 open Format
+open TodoAST
 open TodoConf
 open TodoIO
 
-open Resource.Infix
-
-let identifier_file = Filename.concat base_folder ".id"
+let id_file = Filename.concat base_folder ".id"
 
 let fresh_identifier () =
-  if not (Sys.file_exists identifier_file) then 0
+  if not (Sys.file_exists id_file) then 0
   else
-    with_input identifier_file >>+ fun chan ->
-    int_of_string (input_line chan)
+    let id = with_input id_file (fun c -> int_of_string (input_line c)) in
+    with_output id_file (fun c -> output_string c (sprintf "%d" (id + 1)));
+    id
 
-let add msg =
+let read_title () =
+  Format.printf "What is the short title ? > %!";
+  read_line ()
+
+let add ~title ~due_date ~priority ~description =
+  let todo = {
+    title = Option.none_apply ~f:read_title title;
+    creation_date = "";
+    due_date;
+    priority = Option.may ~default:0 priority;
+    description
+  } in
   let id = fresh_identifier () in
   let filename = Filename.concat todo_folder (sprintf "%05d.todo" id) in
-  with_output filename >>+ fun c -> output_string c msg;
-  with_output identifier_file >>+ fun c -> output_string c (sprintf "%d" id)
+  with_output filename (fun c ->
+    let fmt = formatter_of_out_channel c in
+    Format.printf "%a" pp_todo todo;
+    Format.fprintf fmt "%a%!" pp_todo todo);
+  Format.printf "Done.%!"
 
 let move_done_file id =
   let filename = sprintf "%05d.todo" id in
@@ -43,7 +57,7 @@ let list kind =
   Array.iter (fun name ->
     let filename = Filename.concat folder name in
     let id = int_of_string String.(sub name 0 (index name '.')) in
-    with_input filename >>+ fun chan ->
-    let line = input_line chan in
-    printf "[%05d] %s@\n" id line
+    with_input filename (fun chan ->
+      let line = input_line chan in
+      printf "[%05d] %s@\n" id line)
   ) filenames

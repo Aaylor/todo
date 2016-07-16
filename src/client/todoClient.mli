@@ -1,5 +1,6 @@
 
-val add : string -> unit
+val add : title:string option -> due_date:string option ->
+  priority:int option -> description:string -> unit
 
 val done_ : int list -> unit
 
