@@ -39,7 +39,7 @@ clean:
 
 # Opam rules
 install: META $(BINARY)
-	ocamlfind install META $(BINARY)
+	ocamlfind install $(BINARY) META
 
 uninstall:
 	ocamlfind remove $(BINARY)
