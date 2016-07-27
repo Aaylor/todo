@@ -16,7 +16,7 @@ FOLDERS         = $(shell find $(ROOT) -type d)
 FOLDERS_FLAG    = $(foreach folder,$(FOLDERS),-I $(folder))
 WARNING_FLAGS   = -w @1..3@5..8@10..26@28..31+32..38@39..43@46..49+50
 OCAMLC_FLAGS    = $(FOLDERS_FLAG) $(WARNING_FLAGS) -annot
-PACKAGES        = cmdliner unix
+PACKAGES        = cmdliner unix ISO8601
 PACKAGES_FLAGS  = $(foreach pkg,$(PACKAGES),-package $(pkg))
 OCAMLFIND_FLAGS = $(PACKAGES_FLAGS) -linkpkg
 
