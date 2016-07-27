@@ -57,11 +57,11 @@ let list kind =
   Array.iter (fun name ->
     let filename = Filename.concat folder name in
     let todo = TodoAST.deserialize filename in
-    Format.printf "%a@\n" (pp_todo ~verbose:false) todo
+    Format.printf "%a@\n" pp_short_todo todo
   ) filenames
 
 let show id =
   let filename = Filename.concat todo_folder (sprintf "%05d.todo" id) in
   if not (Sys.file_exists filename) then assert false; (* FIXME *)
   let todo = TodoAST.deserialize filename in
-  Format.printf "%a@\n" (pp_todo ~verbose:true) todo
+  Format.printf "%a@\n" pp_todo todo
