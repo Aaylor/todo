@@ -18,20 +18,20 @@ let read_title () =
   read_line ()
 
 let add ~title ~due_date ~priority ~description =
+  let id = fresh_identifier () in
+  let f dd = ISO8601.Permissive.datetime ~reqtime:false dd in
   let todo = {
+    id;
     title = Option.none_apply ~f:read_title title;
-    creation_date = "";
-    due_date;
+    creation_date = Unix.time ();
+    due_date = Option.may_apply ~f due_date;
     priority = Option.may ~default:0 priority;
     description
   } in
-  let id = fresh_identifier () in
   let filename = Filename.concat todo_folder (sprintf "%05d.todo" id) in
   with_output filename (fun c ->
     let fmt = formatter_of_out_channel c in
-    Format.printf "%a" pp_todo todo;
-    Format.fprintf fmt "%a%!" pp_todo todo);
-  Format.printf "Done.%!"
+    Format.fprintf fmt "%s%!" (serialize todo))
 
 let move_done_file id =
   let filename = sprintf "%05d.todo" id in
@@ -56,8 +56,12 @@ let list kind =
   Array.sort String.compare filenames;
   Array.iter (fun name ->
     let filename = Filename.concat folder name in
-    let id = int_of_string String.(sub name 0 (index name '.')) in
-    with_input filename (fun chan ->
-      let line = input_line chan in
-      printf "[%05d] %s@\n" id line)
+    let todo = TodoAST.deserialize filename in
+    Format.printf "%a@\n" (pp_todo ~verbose:false) todo
   ) filenames
+
+let show id =
+  let filename = Filename.concat todo_folder (sprintf "%05d.todo" id) in
+  if not (Sys.file_exists filename) then assert false; (* FIXME *)
+  let todo = TodoAST.deserialize filename in
+  Format.printf "%a@\n" (pp_todo ~verbose:true) todo

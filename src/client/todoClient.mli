@@ -9,3 +9,5 @@ type list_kind =
   | Done
 
 val list : list_kind -> unit
+
+val show : int -> unit

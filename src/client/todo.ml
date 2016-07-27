@@ -59,6 +59,16 @@ let list =
   Term.(pure list $ kind),
   Term.info ~version ~doc "list"
 
+let show =
+  let doc = "TODO" in
+  let id =
+    let doc = "TODO" in
+    let docv = "ID" in
+    Arg.(required & pos 0 (some int) None & info [] ~doc ~docv)
+  in
+  Term.(pure TodoClient.show $ id),
+  Term.info ~version ~doc "show"
+
 (* Default *)
 
 let default =
@@ -68,7 +78,7 @@ let default =
 (* Entry point *)
 
 let commands = [
-  add; done_; list
+  add; done_; list; show
 ]
 
 let () =
