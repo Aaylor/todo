@@ -1,0 +1,4 @@
+name="todo"
+version="0.1"
+description="simple todo task client"
+requires="unix,ISO8601,cmdliner"

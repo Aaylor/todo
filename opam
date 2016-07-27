@@ -1,0 +1,14 @@
+opam-version: "1.2"
+available: [ ocaml-version >= "4.03.0" ]
+version: "0.1"
+name: "todo"
+authors: [ "Loïc Runarvot" ]
+maintainer: "loic.runarvot@gmail.com"
+homepage: "https://github.com/Aaylor/todo"
+dev-repo: "https://github.com/Aaylor/todo.git"
+doc: "https://github.com/Aaylor/todo"
+bug-reports: "https://github.com/Aaylor/todo"
+build: [ make ]
+install: [ make "install" ]
+remove: [ "ocamlfind" "remove" "todo" ]
+depends: [ "ocamlfind" "cmdliner" "ISO8601" ]
