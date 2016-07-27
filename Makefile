@@ -37,6 +37,12 @@ clean:
 		-delete
 
 
+# Opam rules
+install: META $(BINARY)
+	ocamlfind install META $(BINARY)
+
+uninstall:
+	ocamlfind remove $(BINARY)
 
 # Default rules to compile every single ml[i] files.
 
