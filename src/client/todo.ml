@@ -1,4 +1,5 @@
 
+
 open Cmdliner
 open TodoConf
 
@@ -70,7 +71,7 @@ let list =
     let todo_kind = match kind with
       | None | Some "todo" -> TodoClient.Todo
       | Some "done" -> TodoClient.Done
-      | _ -> assert false (* FIXME *)
+      | Some s -> TodoError.abort (Format.sprintf "Unknown subcommand `%s'" s)
     in
     TodoClient.list todo_kind
   in

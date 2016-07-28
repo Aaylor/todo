@@ -63,7 +63,8 @@ let move_done_file id =
   let filename = sprintf "%05d.todo" id in
   let todo_file = Filename.concat todo_folder filename in
   let done_file = Filename.concat done_folder filename in
-  if not (Sys.file_exists todo_file) then assert false; (* FIXME *)
+  if not (Sys.file_exists todo_file)
+  then TodoError.abort (sprintf "Unknown task %d." id);
   Sys.rename todo_file done_file
 
 let done_ ids =
@@ -88,6 +89,7 @@ let list kind =
 
 let show id =
   let filename = Filename.concat todo_folder (sprintf "%05d.todo" id) in
-  if not (Sys.file_exists filename) then assert false; (* FIXME *)
+  if not (Sys.file_exists filename)
+  then TodoError.abort (sprintf "Unknown task %d." id);
   let todo = TodoAST.deserialize filename in
   Format.printf "%a@\n" pp_todo todo
