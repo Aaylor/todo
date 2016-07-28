@@ -6,6 +6,10 @@ val add : title:string option -> due_date:string option ->
     new todo task according to all parameters and add it to the
     task list. *)
 
+val add_interactive : unit -> unit
+(** [add_interactive ()] is equivalent as [add], but instead
+    of taking parameters, it asks informations in stdin. *)
+
 val done_ : int list -> unit
 (** [done_ l] renders all taks ids in [l] from todo to done. *)
 

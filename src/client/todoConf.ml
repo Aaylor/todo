@@ -1,5 +1,5 @@
 
-let version = "0.0.1alpha"
+let version = "0.1"
 
 let getenv what =
   try Sys.getenv what

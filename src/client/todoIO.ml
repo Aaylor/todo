@@ -14,3 +14,25 @@ let with_output path =
     (fun () -> open_out path),
     (fun c -> flush c; close_out c)
   )
+
+let ask ?(prompt = ">") question =
+  Format.printf "%s %s %!" question prompt;
+  String.trim (read_line ())
+
+let rec ask_until ?(prompt = ">") ?(err = "Incorrect input.") q p =
+  let answer = ask ~prompt q in
+  if p answer then answer
+  else begin
+    Format.eprintf "%s@\n%!" err;
+    ask_until ~prompt ~err q p
+  end
+
+let read_until ?(prompt = ">") ~header p =
+  Format.printf "%s %s %!" header prompt;
+  let buffer = Buffer.create 13 in
+  let rec r () =
+    let line = String.trim (read_line ()) in
+    if p line then Buffer.contents buffer
+    else (Buffer.add_string buffer line; Buffer.add_char buffer '\n'; r ())
+  in
+  r ()
